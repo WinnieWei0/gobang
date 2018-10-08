@@ -10,8 +10,16 @@
 <body>
   <div class="main">
     <div class="left">left</div>
-    <div class="content">content</div>
+    <div class="content">
+      <div class="circle"></div>
+    </div>
     <div class="right">right</div>
   </div>
+  <script src="./jquery-3.3.1.min.js"></script>
+  <script>
+    $('.content').click(function(e){
+      console.log(222,e.offsetX,e.offsetY)
+    })
+  </script>
 </body>
 </html>
