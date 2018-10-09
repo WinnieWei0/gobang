@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -7,6 +8,7 @@
   <title>五子棋</title>
   <link rel="stylesheet" href="./index.css">
 </head>
+
 <body>
   <div class="main">
     <div class="left">left</div>
@@ -19,55 +21,75 @@
   </div>
   <script src="./jquery-3.3.1.min.js"></script>
   <script>
-    window.onload=function(){
+    window.onload = function () {
       Draw()
     }
-    $('.content').click(function(e){
-      console.log(222,e.offsetX,e.offsetY)
+    $('.checkerboard').click(function (e) {
+      // if (ctx.isPointInPath(20, 40)) {     //点是否在范围内
+      //   ctx.stroke();
+      // };
+      DrawPiece(e)
     })
     // 绘制棋盘
-    function Draw(){
-      let ctx=document.getElementById('myCanvas').getContext('2d')
-      ctx.lineWidth=3
-      ctx.strokeRect(0,0,360,360)
+    function Draw() {
+      let ctx = document.getElementById('myCanvas').getContext('2d')
+      ctx.lineWidth = 3
+      ctx.strokeRect(0, 0, 360, 360)
       ctx.beginPath()
-      for(let i=1;i<18;i++){
-        ctx.moveTo(0,20*i)
-        ctx.lineTo(360,20*i)
-        ctx.moveTo(20*i,0)
-        ctx.lineTo(20*i,360)
+      for (let i = 1; i < 18; i++) {
+        ctx.moveTo(0, 20 * i)
+        ctx.lineTo(360, 20 * i)
+        ctx.moveTo(20 * i, 0)
+        ctx.lineTo(20 * i, 360)
       }
-      ctx.lineWidth=1
+      ctx.lineWidth = 1
       ctx.stroke()
       // 标识点
       ctx.beginPath()
-      ctx.arc(60,60,3,0,2*Math.PI)
+      ctx.arc(60, 60, 3, 0, 2 * Math.PI)
       ctx.stroke()
       ctx.beginPath()
-      ctx.arc(300,60,3,0,2*Math.PI)
+      ctx.arc(300, 60, 3, 0, 2 * Math.PI)
       ctx.stroke()
       ctx.beginPath()
-      ctx.arc(120,120,3,0,2*Math.PI)
+      ctx.arc(120, 120, 3, 0, 2 * Math.PI)
       ctx.stroke()
       ctx.beginPath()
-      ctx.arc(240,120,3,0,2*Math.PI)
+      ctx.arc(240, 120, 3, 0, 2 * Math.PI)
       ctx.stroke()
       ctx.beginPath()
-      ctx.arc(240,240,3,0,2*Math.PI)
+      ctx.arc(240, 240, 3, 0, 2 * Math.PI)
       ctx.stroke()
       ctx.beginPath()
-      ctx.arc(120,240,3,0,2*Math.PI)
+      ctx.arc(120, 240, 3, 0, 2 * Math.PI)
       ctx.stroke()
       ctx.beginPath()
-      ctx.arc(180,180,3,0,2*Math.PI)
+      ctx.arc(180, 180, 3, 0, 2 * Math.PI)
       ctx.stroke()
       ctx.beginPath()
-      ctx.arc(60,300,3,0,2*Math.PI)
+      ctx.arc(60, 300, 3, 0, 2 * Math.PI)
       ctx.stroke()
       ctx.beginPath()
-      ctx.arc(300,300,3,0,2*Math.PI)
+      ctx.arc(300, 300, 3, 0, 2 * Math.PI)
+      ctx.stroke()
+    }
+    // 绘制黑色棋子
+    function DrawPiece(e) {
+      let ctx = document.getElementById('myCanvas').getContext('2d')
+      ctx.beginPath()
+      ctx.arc(e.offsetX, e.offsetY, 8, 0, 2 * Math.PI)
+      ctx.fill()
+      ctx.stroke()
+    }
+    // 绘制白色棋子
+    function DrawPiece(e) {
+      let ctx = document.getElementById('myCanvas').getContext('2d')
+      ctx.beginPath()
+      ctx.arc(e.offsetX, e.offsetY, 8, 0, 2 * Math.PI)
+      ctx.fill()
       ctx.stroke()
     }
   </script>
 </body>
+
 </html>
