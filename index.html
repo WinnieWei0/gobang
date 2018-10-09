@@ -11,14 +11,63 @@
   <div class="main">
     <div class="left">left</div>
     <div class="content">
+      <div class="checkerboard">
+        <canvas id="myCanvas" width="360" height="360"></canvas>
+      </div>
     </div>
     <div class="right">right</div>
   </div>
   <script src="./jquery-3.3.1.min.js"></script>
   <script>
+    window.onload=function(){
+      Draw()
+    }
     $('.content').click(function(e){
       console.log(222,e.offsetX,e.offsetY)
     })
+    // 绘制棋盘
+    function Draw(){
+      let ctx=document.getElementById('myCanvas').getContext('2d')
+      ctx.lineWidth=3
+      ctx.strokeRect(0,0,360,360)
+      ctx.beginPath()
+      for(let i=1;i<18;i++){
+        ctx.moveTo(0,20*i)
+        ctx.lineTo(360,20*i)
+        ctx.moveTo(20*i,0)
+        ctx.lineTo(20*i,360)
+      }
+      ctx.lineWidth=1
+      ctx.stroke()
+      // 标识点
+      ctx.beginPath()
+      ctx.arc(60,60,3,0,2*Math.PI)
+      ctx.stroke()
+      ctx.beginPath()
+      ctx.arc(300,60,3,0,2*Math.PI)
+      ctx.stroke()
+      ctx.beginPath()
+      ctx.arc(120,120,3,0,2*Math.PI)
+      ctx.stroke()
+      ctx.beginPath()
+      ctx.arc(240,120,3,0,2*Math.PI)
+      ctx.stroke()
+      ctx.beginPath()
+      ctx.arc(240,240,3,0,2*Math.PI)
+      ctx.stroke()
+      ctx.beginPath()
+      ctx.arc(120,240,3,0,2*Math.PI)
+      ctx.stroke()
+      ctx.beginPath()
+      ctx.arc(180,180,3,0,2*Math.PI)
+      ctx.stroke()
+      ctx.beginPath()
+      ctx.arc(60,300,3,0,2*Math.PI)
+      ctx.stroke()
+      ctx.beginPath()
+      ctx.arc(300,300,3,0,2*Math.PI)
+      ctx.stroke()
+    }
   </script>
 </body>
 </html>
