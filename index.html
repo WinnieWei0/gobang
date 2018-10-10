@@ -21,14 +21,12 @@
   </div>
   <script src="./jquery-3.3.1.min.js"></script>
   <script>
+    let ctx = document.getElementById('myCanvas').getContext('2d')
     window.onload = function () {
       Draw()
     }
     $('.checkerboard').click(function (e) {
-      // if (ctx.isPointInPath(20, 40)) {     //点是否在范围内
-      //   ctx.stroke();
-      // };
-      DrawPiece(e)
+      Position(e.offsetX, e.offsetY)
     })
     // 绘制棋盘
     function Draw() {
@@ -73,21 +71,39 @@
       ctx.arc(300, 300, 3, 0, 2 * Math.PI)
       ctx.stroke()
     }
+
     // 绘制黑色棋子
-    function DrawPiece(e) {
-      let ctx = document.getElementById('myCanvas').getContext('2d')
+    function DrawPieceB(x, y) {
       ctx.beginPath()
-      ctx.arc(e.offsetX, e.offsetY, 8, 0, 2 * Math.PI)
+      ctx.arc(x, y, 8, 0, 2 * Math.PI)
+      ctx.fill()
+    }
+    // 绘制白色棋子
+    function DrawPieceW(x, y) {
+      ctx.beginPath()
+      ctx.arc(x, y, 8, 0, 2 * Math.PI)
+      ctx.fillStyle = 'white'
+      ctx.strokeStyle = 'white'
       ctx.fill()
       ctx.stroke()
     }
-    // 绘制白色棋子
-    function DrawPiece(e) {
-      let ctx = document.getElementById('myCanvas').getContext('2d')
-      ctx.beginPath()
-      ctx.arc(e.offsetX, e.offsetY, 8, 0, 2 * Math.PI)
-      ctx.fill()
-      ctx.stroke()
+    // 人下棋位置判断
+    function Position(x, y) {
+      for (let i = x - 8; i < x + 8; i++) {
+        for (let j = y - 8; j < y + 8; j++) {
+          if (i % 20 === 0 && j % 20 === 0) {
+            // console.log(x, y, ' i:' + i + ' j:' + j)
+            DrawPieceB(i, j)
+            if (ctx.isPointInPath(x, y)) { //点是否在范围内
+              ctx.stroke()
+            };
+          }
+        }
+      }
+    }
+    // 机器下棋
+    function MachineChess(){
+      
     }
   </script>
 </body>
