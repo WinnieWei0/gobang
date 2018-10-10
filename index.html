@@ -19,9 +19,11 @@
     </div>
     <div class="right">right</div>
   </div>
+
   <script src="./jquery-3.3.1.min.js"></script>
   <script>
     let ctx = document.getElementById('myCanvas').getContext('2d')
+      let transverseCount=0   //横向数量
     window.onload = function () {
       Draw()
     }
@@ -94,8 +96,9 @@
           if (i % 20 === 0 && j % 20 === 0) {
             // console.log(x, y, ' i:' + i + ' j:' + j)
             DrawPieceB(i, j)
-            if (ctx.isPointInPath(x, y)) { //点是否在范围内
+            if (ctx.isPointInPath(x, y)) { //点击的点x,y是否在范围内
               ctx.stroke()
+              isWin(i,j)
             };
           }
         }
@@ -104,6 +107,19 @@
     // 机器下棋
     function MachineChess(){
       
+    }
+    // 判断是否有五个子，赢了
+    function isWin(x,y){
+      // 判断横向
+      for(let i=x;i>=x-20*5;i=i-20){
+        console.log(transverseCount,x,y,i)
+        if(ctx.isPointInPath(i, y)){
+          transverseCount++
+        }
+      }
+      if(transverseCount===5){
+        alert(true)
+      }
     }
   </script>
 </body>
