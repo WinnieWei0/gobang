@@ -24,8 +24,8 @@
   <script>
     let ctx = document.getElementById('myCanvas').getContext('2d')
     let transverseCount = 0 //横向数量
-    let person=[]   //人下棋位置集合
-    let machine=[]   //机器下棋位置集合
+    let person = [] //人下棋位置集合
+    let machine = [] //机器下棋位置集合
     window.onload = function () {
       Draw()
     }
@@ -100,7 +100,10 @@
             // console.log(x, y, ' i:' + i + ' j:' + j)
             DrawPieceB(i, j)
             if (ctx.isPointInPath(x, y)) { //点击的点x,y是否在范围内
-            person.push({x:i,y:j})
+              person.push({
+                x: i,
+                y: j
+              })
               ctx.stroke()
               isWin(i, j)
             };
@@ -115,23 +118,35 @@
     // 判断是否有五个子，赢了
     function isWin(x, y) {
       // 判断横向
-      let arr=[]
-      let ai=0
-      console.log(x,y,person)
-      for(let i=0;i<person.length;i++){
-          console.log(1111111,x,y,person[i])
-        if(y===person[i].y){
-          console.log(222222222,x,y,person[i])
-          for(let j=x;j>=0;j--){
-            console.log(44444,x,person[i].x,person[i].x-j)
-            if(person[i].x-j%20===0&&x===person[i].x-j){
+      let arr = []
+      let ai = 0
+      console.log(x, y, person)
+      for (let i = 0; i < person.length; i++) {
+        console.log(1111111, x, y, person[i])
+        if (y === person[i].y) {
+          for (let j = 0; j < 5; j++) {
+            console.log(44444, x, person[i].x, person[i].x - j)
+            if (x - 20 * j === person[i].x) {
               transverseCount++
-          console.log(33333333333,transverseCount,person[i])
+              console.log(33333333333, transverseCount, person[i])
+            } else {
+              break
+            }
+          }
+          for (let m = 0; m < 5; m++) {
+            if (x + 20 * m === person[i].x) {
+              transverseCount++
+              console.log(33333333333, transverseCount, person[i])
+            } else {
+              break
             }
           }
         }
       }
-      console.log(66666666,transverseCount)
+      console.log(66666666, transverseCount)
+      if (transverseCount === 5) {
+        alert(true)
+      }
     }
   </script>
 </body>
