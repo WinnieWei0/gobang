@@ -118,6 +118,7 @@
           if (i % 20 === 0 && j % 20 === 0) {
             console.log(x, y, ' i:' + i + ' j:' + j)
             DrawPieceB(i, j)
+            flag = true
             if (ctx.isPointInPath(x, y)) { //点击的点x,y是否在范围内
               person.push({
                 x: i,
@@ -131,20 +132,15 @@
           }
         }
       }
-      setTimeout(()=>{
-      MachineChess()
-      },500)
+      if (flag) {
+        setTimeout(() => {
+          MachineChess()
+        }, 100)
+      }
     }
     // 机器下棋
     function MachineChess() {
-      // for (let i in personCount) {
-      //   if (personCount[i] >= 3) {
-      //     console.log(i+':'+personCount[i],chessX,chessY)
-
-      //   }
-      // }
-      console.log(chessX,chessY,personCount)
-      // if (personCount.left >= 3) {
+      console.log(chessX, chessY, personCount)
       if (person.some(val => chessX + 20 !== val.x && chessY === val.y) || machine.some(val => chessX + 20 !== val.x &&
           chessY === val.y)) {
         console.log(111111111111)
@@ -164,7 +160,7 @@
         })
         machineCount.left++
       }
-      console.log(333333333,machineCount)
+      console.log(333333333, machineCount)
     }
     // 判断是否有五个子，赢了
     function isWin(x, y, count, arr) {
