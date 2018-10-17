@@ -23,24 +23,33 @@
   <script src="./jquery-3.3.1.min.js"></script>
   <script>
     let ctx = document.getElementById('myCanvas').getContext('2d')
-    let transverseCount = {
-      left:0,
-      top:0,
-      upperLeft:0,   //左上开始
-      lowerLeft:0    //左下开始
-    } //横向数量
+    let personCount = {
+      left: 0,
+      top: 0,
+      upperLeft: 0, //左上开始
+      lowerLeft: 0 //左下开始
+    }
+    let machineCount = {
+      left: 0,
+      top: 0,
+      upperLeft: 0, //左上开始
+      lowerLeft: 0 //左下开始
+    }
     let person = [] //人下棋位置集合
     let machine = [] //机器下棋位置集合
+    let chessX, chessY
+    let flag = false
+
     window.onload = function () {
       Draw()
     }
     $('.checkerboard').click(function (e) {
-      transverseCount = {
-      left:0,
-      top:0,
-      upperLeft:0,   //左上开始
-      lowerLeft:0    //左下开始
-    }
+      personCount = {
+        left: 0,
+        top: 0,
+        upperLeft: 0, //左上开始
+        lowerLeft: 0 //左下开始
+      }
       Position(e.offsetX, e.offsetY)
     })
     // 绘制棋盘
@@ -107,7 +116,7 @@
       for (let i = x - 8; i < x + 8; i++) {
         for (let j = y - 8; j < y + 8; j++) {
           if (i % 20 === 0 && j % 20 === 0) {
-            // console.log(x, y, ' i:' + i + ' j:' + j)
+            console.log(x, y, ' i:' + i + ' j:' + j)
             DrawPieceB(i, j)
             if (ctx.isPointInPath(x, y)) { //点击的点x,y是否在范围内
               person.push({
@@ -115,81 +124,111 @@
                 y: j
               })
               ctx.stroke()
-              isWin(i, j)
+              chessX = i
+              chessY = j
+              isWin(i, j, personCount, person)
             };
           }
         }
       }
+      setTimeout(()=>{
+      MachineChess()
+      },500)
     }
     // 机器下棋
     function MachineChess() {
+      // for (let i in personCount) {
+      //   if (personCount[i] >= 3) {
+      //     console.log(i+':'+personCount[i],chessX,chessY)
 
+      //   }
+      // }
+      console.log(chessX,chessY,personCount)
+      // if (personCount.left >= 3) {
+      if (person.some(val => chessX + 20 !== val.x && chessY === val.y) || machine.some(val => chessX + 20 !== val.x &&
+          chessY === val.y)) {
+        console.log(111111111111)
+        DrawPieceW(chessX + 20, chessY)
+        machine.push({
+          x: chessX + 20,
+          y: chessY
+        })
+        machineCount.left++
+      } else if (person.some(val => chessX - 20 !== val.x && chessY === val.y) || machine.some(val => chessX - 20 !==
+          val.x && chessY === val.y)) {
+        console.log(222222222)
+        DrawPieceW(chessX - 20, chessY)
+        machine.push({
+          x: chessX - 20,
+          y: chessY
+        })
+        machineCount.left++
+      }
+      console.log(333333333,machineCount)
     }
     // 判断是否有五个子，赢了
-    function isWin(x, y) {
+    function isWin(x, y, count, arr) {
       // 判断横向
-      let arrLeft = person.filter(val => y === val.y)
       for (let i = 0; i < 5; i++) {
-        if (arrLeft.some(val => x - 20 * i === val.x)) {
-          transverseCount.left++
+        if (arr.some(val => y === val.y && x - 20 * i === val.x)) {
+          count.left++
         } else {
           break
         }
       }
       for (let m = 1; m < 5; m++) {
-        if (arrLeft.some(val => x + 20 * m === val.x)) {
-          transverseCount.left++
+        if (arr.some(val => y === val.y && x + 20 * m === val.x)) {
+          count.left++
         } else {
           break
         }
       }
       // 判断纵向
-      let arrTop = person.filter(val => x === val.x)
       for (let i = 0; i < 5; i++) {
-        if (arrTop.some(val => y - 20 * i === val.y)) {
-          transverseCount.top++
+        if (arr.some(val => x === val.x && y - 20 * i === val.y)) {
+          count.top++
         } else {
           break
         }
       }
       for (let m = 1; m < 5; m++) {
-        if (arrTop.some(val => y + 20 * m === val.y)) {
-          transverseCount.top++
+        if (arr.some(val => x === val.x && y + 20 * m === val.y)) {
+          count.top++
         } else {
           break
         }
       }
       // 判断左上到右下的斜线
       for (let i = 0; i < 5; i++) {
-        if (person.some(val => x - 20 * i === val.x&&y - 20 * i === val.y)) {
-          transverseCount.upperLeft++
+        if (arr.some(val => x - 20 * i === val.x && y - 20 * i === val.y)) {
+          count.upperLeft++
         } else {
           break
         }
       }
       for (let m = 1; m < 5; m++) {
-        if (person.some(val => x + 20 * m === val.x&&y + 20 * m === val.y)) {
-          transverseCount.upperLeft++
+        if (arr.some(val => x + 20 * m === val.x && y + 20 * m === val.y)) {
+          count.upperLeft++
         } else {
           break
         }
       }
       // 判断左下到右上的斜线
       for (let i = 0; i < 5; i++) {
-        if (person.some(val => x - 20 * i === val.x&&y + 20 * i === val.y)) {
-          transverseCount.lowerLeft++
+        if (arr.some(val => x - 20 * i === val.x && y + 20 * i === val.y)) {
+          count.lowerLeft++
         } else {
           break
         }
       }
       for (let m = 1; m < 5; m++) {
-        if (person.some(val => x + 20 * m === val.x&&y - 20 * m === val.y)) {
-          transverseCount.lowerLeft++
+        if (arr.some(val => x + 20 * m === val.x && y - 20 * m === val.y)) {
+          count.lowerLeft++
         } else {
           break
         }
       }
-      if (transverseCount.left >= 5||transverseCount.top >= 5||transverseCount.upperLeft >= 5||transverseCount.lowerLeft >= 5) {
+      if (count.left >= 5 || count.top >= 5 || count.upperLeft >= 5 || count.lowerLeft >= 5) {
         alert('you win')
       }
     }
