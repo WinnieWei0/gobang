@@ -160,10 +160,35 @@
     }
     // 机器下棋
     function MachineChess() {
-      
-      DrawPiece('white', chessX + 20, chessY)
-      machine[chessX + 20][chessY] = 2
-      isWin('black', chessX + 20, chessY)
+      let x,y
+      if(count.left>=3&&!machine[chessX + 20][chessY]){
+        x=chessX + 20
+        y=chessY
+      }else if(count.left>=3&&!machine[chessX - 20][chessY]){
+        x=chessX - 20
+        y=chessY
+      }else{
+        // x=chessX 
+        // y=chessY
+        for(let i=0;i<20;i++){
+          for(let j=0;j<20;j++){
+            if(machine[i][j]===2){
+              if(!machine[i+20][j]){
+                x=chessX + 20
+        y=chessY
+              }else if(!machine[i-20][j]){
+                x=chessX - 20
+        y=chessY
+              }
+            }
+          }
+        }
+      }
+
+console.log(x,y)
+      DrawPiece('white', x, y)
+      machine[x][y] = 2
+      isWin('black', x, y)
     }
 
     // 判断是否赢了
