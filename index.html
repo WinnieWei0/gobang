@@ -23,33 +23,35 @@
   <script src="./jquery-3.3.1.min.js"></script>
   <script>
     let ctx = document.getElementById('myCanvas').getContext('2d')
-    let personCount = {
+    let count = {
       left: 0,
       top: 0,
       upperLeft: 0, //左上开始
       lowerLeft: 0 //左下开始
     }
-    let machineCount = {
-      left: 0,
-      top: 0,
-      upperLeft: 0, //左上开始
-      lowerLeft: 0 //左下开始
-    }
-    let person = [] //人下棋位置集合
-    let machine = [] //机器下棋位置集合
+    // let machineCount = {
+    //   left: 0,
+    //   top: 0,
+    //   upperLeft: 0, //左上开始
+    //   lowerLeft: 0 //左下开始
+    // }
+    // let count = 0
+    // let person = [] //人下棋位置集合
+    let machine //机器下棋位置集合
     let chessX, chessY
-    let flag = false
+    // let flag = true
 
     window.onload = function () {
       Draw()
     }
     $('.checkerboard').click(function (e) {
-      personCount = {
+      count = {
         left: 0,
         top: 0,
         upperLeft: 0, //左上开始
         lowerLeft: 0 //左下开始
       }
+      // count = 0
       Position(e.offsetX, e.offsetY)
     })
     // 绘制棋盘
@@ -94,131 +96,134 @@
       ctx.beginPath()
       ctx.arc(300, 300, 3, 0, 2 * Math.PI)
       ctx.stroke()
+
+      initMachine()
     }
 
-    // 绘制黑色棋子
-    function DrawPieceB(x, y) {
-      ctx.beginPath()
-      ctx.arc(x, y, 8, 0, 2 * Math.PI)
-      ctx.fill()
+    function initMachine() {
+      machine = new Array(20)
+      for (let i = 0; i < 20; i++) {
+        machine[i * 20] = new Array(20)
+        for (let j = 0; j < 20; j++) {
+          machine[i * 20][j * 20] = 0
+        }
+      }
     }
-    // 绘制白色棋子
-    function DrawPieceW(x, y) {
+    // 绘制棋子
+    function DrawPiece(color, x, y) {
       ctx.beginPath()
       ctx.arc(x, y, 8, 0, 2 * Math.PI)
-      ctx.fillStyle = 'white'
-      ctx.strokeStyle = 'white'
+      ctx.fillStyle = color
+      ctx.strokeStyle = color
       ctx.fill()
       ctx.stroke()
     }
+    // 绘制白色棋子
+    // function DrawPieceW(x, y) {
+    //   ctx.beginPath()
+    //   if (!flag) {
+    //     ctx.arc(x, y, 8, 0, 2 * Math.PI)
+    //     ctx.fillStyle = 'white'
+    //     ctx.strokeStyle = 'white'
+    //     ctx.fill()
+    //     ctx.stroke()
+    //   }
+    // }
     // 人下棋位置判断
     function Position(x, y) {
       for (let i = x - 8; i < x + 8; i++) {
         for (let j = y - 8; j < y + 8; j++) {
           if (i % 20 === 0 && j % 20 === 0) {
+            if (machine[i][j]) {
+              break
+            }
             console.log(x, y, ' i:' + i + ' j:' + j)
-            DrawPieceB(i, j)
-            flag = true
-            if (ctx.isPointInPath(x, y)) { //点击的点x,y是否在范围内
-              person.push({
-                x: i,
-                y: j
-              })
-              ctx.stroke()
-              chessX = i
-              chessY = j
-              isWin(i, j, personCount, person)
-            };
+            // flag = true
+            DrawPiece('black', i, j)
+            // if (ctx.isPointInPath(x, y)) { //点击的点x,y是否在范围内
+            // person.push({
+            //   x: i,
+            //   y: j
+            // })
+            chessX = i
+            chessY = j
+            // isWin(i, j)
+            // }
+            machine[i][j] = 1
+            isWin('black', i, j)
           }
         }
       }
-      if (flag) {
-        setTimeout(() => {
-          MachineChess()
-        }, 100)
-      }
+      setTimeout(() => {
+        MachineChess()
+      }, 100)
     }
     // 机器下棋
     function MachineChess() {
-      console.log(chessX, chessY, personCount)
-      if (person.some(val => chessX + 20 !== val.x && chessY === val.y) || machine.some(val => chessX + 20 !== val.x &&
-          chessY === val.y)) {
-        console.log(111111111111)
-        DrawPieceW(chessX + 20, chessY)
-        machine.push({
-          x: chessX + 20,
-          y: chessY
-        })
-        machineCount.left++
-      } else if (person.some(val => chessX - 20 !== val.x && chessY === val.y) || machine.some(val => chessX - 20 !==
-          val.x && chessY === val.y)) {
-        console.log(222222222)
-        DrawPieceW(chessX - 20, chessY)
-        machine.push({
-          x: chessX - 20,
-          y: chessY
-        })
-        machineCount.left++
-      }
-      console.log(333333333, machineCount)
+      
+      DrawPiece('white', chessX + 20, chessY)
+      machine[chessX + 20][chessY] = 2
+      isWin('black', chessX + 20, chessY)
     }
-    // 判断是否有五个子，赢了
-    function isWin(x, y, count, arr) {
+
+    // 判断是否赢了
+    function isWin(color, x, y) {
       // 判断横向
+      let temp = color === 'black' ? 1 : 2
       for (let i = 0; i < 5; i++) {
-        if (arr.some(val => y === val.y && x - 20 * i === val.x)) {
+        if (machine[x - 20 * i][y] === temp) {
           count.left++
         } else {
           break
         }
       }
       for (let m = 1; m < 5; m++) {
-        if (arr.some(val => y === val.y && x + 20 * m === val.x)) {
+        if (machine[x + 20 * m][y] === temp) {
           count.left++
         } else {
           break
         }
       }
-      // 判断纵向
+      // // 判断纵向
       for (let i = 0; i < 5; i++) {
-        if (arr.some(val => x === val.x && y - 20 * i === val.y)) {
+        if (machine[x][y - 20 * i] === temp) {
           count.top++
         } else {
           break
         }
       }
       for (let m = 1; m < 5; m++) {
-        if (arr.some(val => x === val.x && y + 20 * m === val.y)) {
+        if (machine[x][y + 20 * m] === temp) {
           count.top++
         } else {
           break
         }
       }
-      // 判断左上到右下的斜线
+      // // 判断左上到右下的斜线
       for (let i = 0; i < 5; i++) {
-        if (arr.some(val => x - 20 * i === val.x && y - 20 * i === val.y)) {
+        if (machine[x - 20 * i][y - 20 * i] === temp) {
           count.upperLeft++
         } else {
           break
         }
       }
       for (let m = 1; m < 5; m++) {
-        if (arr.some(val => x + 20 * m === val.x && y + 20 * m === val.y)) {
+        if (machine[x + 20 * m][y + 20 * m] === temp) {
           count.upperLeft++
         } else {
           break
         }
       }
-      // 判断左下到右上的斜线
+      // // 判断左下到右上的斜线
       for (let i = 0; i < 5; i++) {
-        if (arr.some(val => x - 20 * i === val.x && y + 20 * i === val.y)) {
+        if (machine[x - 20 * i][y + 20 * i] === temp) {
           count.lowerLeft++
         } else {
           break
         }
       }
       for (let m = 1; m < 5; m++) {
-        if (arr.some(val => x + 20 * m === val.x && y - 20 * m === val.y)) {
+        if (machine[x + 20 * m][y - 20 * m] === temp) {
           count.lowerLeft++
         } else {
           break
