@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -8,7 +7,6 @@
   <title>五子棋</title>
   <link rel="stylesheet" href="./index.css">
 </head>
-
 <body>
   <div class="main">
     <div class="left">left</div>
@@ -19,7 +17,6 @@
     </div>
     <div class="right">right</div>
   </div>
-
   <script src="./jquery-3.3.1.min.js"></script>
   <script>
     let ctx = document.getElementById('myCanvas').getContext('2d')
@@ -40,7 +37,6 @@
     let machine //机器下棋位置集合
     let chessX, chessY
     // let flag = true
-
     window.onload = function () {
       Draw()
     }
@@ -99,12 +95,11 @@
 
       initMachine()
     }
-
     function initMachine() {
       machine = new Array(20)
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < 19; i++) {
         machine[i * 20] = new Array(20)
-        for (let j = 0; j < 20; j++) {
+        for (let j = 0; j < 19; j++) {
           machine[i * 20][j * 20] = 0
         }
       }
@@ -118,17 +113,6 @@
       ctx.fill()
       ctx.stroke()
     }
-    // 绘制白色棋子
-    // function DrawPieceW(x, y) {
-    //   ctx.beginPath()
-    //   if (!flag) {
-    //     ctx.arc(x, y, 8, 0, 2 * Math.PI)
-    //     ctx.fillStyle = 'white'
-    //     ctx.strokeStyle = 'white'
-    //     ctx.fill()
-    //     ctx.stroke()
-    //   }
-    // }
     // 人下棋位置判断
     function Position(x, y) {
       for (let i = x - 8; i < x + 8; i++) {
@@ -160,35 +144,42 @@
     }
     // 机器下棋
     function MachineChess() {
-      let x,y
-      if(count.left>=3&&!machine[chessX + 20][chessY]){
-        x=chessX + 20
-        y=chessY
-      }else if(count.left>=3&&!machine[chessX - 20][chessY]){
-        x=chessX - 20
-        y=chessY
-      }else{
+      let x, y
+      if (count.left >= 3 && !machine[chessX + 20][chessY]) {
+        x = chessX + 20
+        y = chessY
+      } else if (count.left >= 3 && !machine[chessX - 20][chessY]) {
+        x = chessX - 20
+        y = chessY
+      } else {
         // x=chessX 
         // y=chessY
-        for(let i=0;i<20;i++){
-          for(let j=0;j<20;j++){
-            if(machine[i][j]===2){
-              if(!machine[i+20][j]){
-                x=chessX + 20
-        y=chessY
-              }else if(!machine[i-20][j]){
-                x=chessX - 20
-        y=chessY
-              }
+        // console.log(machine)
+        for (let i = 0; i < 19; i++) {
+          for (let j = 0; j < 19; j++) {
+            console.log(1111,x,y,i,j,i*20,j*20,machine[i*20][j*20])
+            if (machine[i*20][j*20] === 0) {
+              // if (!machine[i + 20][j]) {
+              //   x = chessX + 20
+              //   y = chessY
+              // } else if (!machine[i - 20][j]) {
+              //   x = chessX - 20
+              //   y = chessY
+              // }
+              x=i
+              y=j
             }
           }
         }
       }
 
-console.log(x,y)
-      DrawPiece('white', x, y)
-      machine[x][y] = 2
-      isWin('black', x, y)
+      // console.log(x*20, y*20)
+      setTimeout(()=>{
+      DrawPiece('white', x*20, y*20)
+      machine[x*20][y*20] = 2
+      // console.log(x*20, y*20)
+      isWin('black', x*20, y*20)
+      },1000)
     }
 
     // 判断是否赢了
@@ -196,6 +187,7 @@ console.log(x,y)
       // 判断横向
       let temp = color === 'black' ? 1 : 2
       for (let i = 0; i < 5; i++) {
+        if(x-20*i<=0) break
         if (machine[x - 20 * i][y] === temp) {
           count.left++
         } else {
@@ -203,6 +195,7 @@ console.log(x,y)
         }
       }
       for (let m = 1; m < 5; m++) {
+        if(x + 20 * m>=360) break
         if (machine[x + 20 * m][y] === temp) {
           count.left++
         } else {
@@ -211,6 +204,7 @@ console.log(x,y)
       }
       // // 判断纵向
       for (let i = 0; i < 5; i++) {
+        if(y-20*i<=0) break
         if (machine[x][y - 20 * i] === temp) {
           count.top++
         } else {
@@ -218,6 +212,7 @@ console.log(x,y)
         }
       }
       for (let m = 1; m < 5; m++) {
+        if(y + 20 * m>=360) break
         if (machine[x][y + 20 * m] === temp) {
           count.top++
         } else {
@@ -226,6 +221,7 @@ console.log(x,y)
       }
       // // 判断左上到右下的斜线
       for (let i = 0; i < 5; i++) {
+        if(x-20*i<=0&&y - 20 * i<=0) break
         if (machine[x - 20 * i][y - 20 * i] === temp) {
           count.upperLeft++
         } else {
@@ -233,6 +229,7 @@ console.log(x,y)
         }
       }
       for (let m = 1; m < 5; m++) {
+        if(x+20*m>=360&&y + 20 * m>=360) break
         if (machine[x + 20 * m][y + 20 * m] === temp) {
           count.upperLeft++
         } else {
@@ -241,6 +238,7 @@ console.log(x,y)
       }
       // // 判断左下到右上的斜线
       for (let i = 0; i < 5; i++) {
+        if(x-20*i<=0&&y + 20 * i>=360) break
         if (machine[x - 20 * i][y + 20 * i] === temp) {
           count.lowerLeft++
         } else {
@@ -248,6 +246,8 @@ console.log(x,y)
         }
       }
       for (let m = 1; m < 5; m++) {
+        if(x+20*m>=360&&y - 20 * m<=0) break
+        console.log(222,x,y,x + 20 * m,y - 20 * m,machine[x + 20 * m][y - 20 * m],machine)
         if (machine[x + 20 * m][y - 20 * m] === temp) {
           count.lowerLeft++
         } else {
