@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -7,6 +8,7 @@
   <title>五子棋</title>
   <link rel="stylesheet" href="./index.css">
 </head>
+
 <body>
   <div class="main">
     <div class="left">left</div>
@@ -26,28 +28,13 @@
       upperLeft: 0, //左上开始
       lowerLeft: 0 //左下开始
     }
-    // let machineCount = {
-    //   left: 0,
-    //   top: 0,
-    //   upperLeft: 0, //左上开始
-    //   lowerLeft: 0 //左下开始
-    // }
-    // let count = 0
-    // let person = [] //人下棋位置集合
     let machine //机器下棋位置集合
     let chessX, chessY
-    // let flag = true
+
     window.onload = function () {
       Draw()
     }
     $('.checkerboard').click(function (e) {
-      // count = {
-      //   left: 0,
-      //   top: 0,
-      //   upperLeft: 0, //左上开始
-      //   lowerLeft: 0 //左下开始
-      // }
-      // count = 0
       Position(e.offsetX, e.offsetY)
     })
     // 绘制棋盘
@@ -95,6 +82,7 @@
 
       initMachine()
     }
+
     function initMachine() {
       machine = new Array(20)
       for (let i = 0; i < 19; i++) {
@@ -122,17 +110,9 @@
               break
             }
             console.log(x, y, ' i:' + i + ' j:' + j)
-            // flag = true
             DrawPiece('black', i, j)
-            // if (ctx.isPointInPath(x, y)) { //点击的点x,y是否在范围内
-            // person.push({
-            //   x: i,
-            //   y: j
-            // })
             chessX = i
             chessY = j
-            // isWin(i, j)
-            // }
             machine[i][j] = 1
             isWin('black', i, j)
           }
@@ -145,32 +125,21 @@
     // 机器下棋
     function MachineChess() {
       let x, y
-      if (count.left >= 3 && !machine[chessX + 20][chessY]) {
-        x = chessX + 20
-        y = chessY
-      } else if (count.left >= 3 && !machine[chessX - 20][chessY]) {
-        x = chessX - 20
-        y = chessY
-      } else {
-        x = chessX - 20
-        y = chessY
-        // console.log(machine)
-        // for (let i = 0; i < 19; i++) {
-        //   for (let j = 0; j < 19; j++) {
-        //     // console.log(1111,x,y,i,j,i*20,j*20,machine[i*20][j*20])
-        //     if (machine[i*20][j*20] === 0) {
-        //       x=i
-        //       y=j
-        //     }
-        //   }
-        // }
-      }
-
-      // console.log(x*20, y*20)
+      model()
       DrawPiece('white', x, y)
       machine[x][y] = 2
-      // console.log(x, y)
       isWin('white', x, y)
+    }
+    // 判断落棋地点
+    function model(){
+      let 
+      for (let i = 0; i < 19; i++) {
+        for (let j = 0; j < 19; j++) {
+          if (machine[i * 20][j * 20] === 0) {
+
+          }
+        }
+      }
     }
 
     // 判断是否赢了
@@ -184,7 +153,7 @@
       // 判断横向
       let temp = color === 'black' ? 1 : 2
       for (let i = 0; i < 5; i++) {
-        if(x-20*i<=0) break
+        if (x - 20 * i <= 0) break
         if (machine[x - 20 * i][y] === temp) {
           count.left++
         } else {
@@ -192,7 +161,7 @@
         }
       }
       for (let m = 1; m < 5; m++) {
-        if(x + 20 * m>=360) break
+        if (x + 20 * m >= 360) break
         if (machine[x + 20 * m][y] === temp) {
           count.left++
         } else {
@@ -201,7 +170,7 @@
       }
       // // 判断纵向
       for (let i = 0; i < 5; i++) {
-        if(y-20*i<=0) break
+        if (y - 20 * i <= 0) break
         if (machine[x][y - 20 * i] === temp) {
           count.top++
         } else {
@@ -209,7 +178,7 @@
         }
       }
       for (let m = 1; m < 5; m++) {
-        if(y + 20 * m>=360) break
+        if (y + 20 * m >= 360) break
         if (machine[x][y + 20 * m] === temp) {
           count.top++
         } else {
@@ -218,8 +187,8 @@
       }
       // // 判断左上到右下的斜线
       for (let i = 0; i < 5; i++) {
-        if(x-20*i<=0&&y - 20 * i<=0) break
-        console.log(machine[x - 20 * i][y - 20 * i] , temp)
+        if (x - 20 * i <= 0 && y - 20 * i <= 0) break
+        // console.log(machine[x - 20 * i][y - 20 * i] , temp)
         if (machine[x - 20 * i][y - 20 * i] === temp) {
           count.upperLeft++
         } else {
@@ -227,8 +196,8 @@
         }
       }
       for (let m = 1; m < 5; m++) {
-        if(x+20*m>=360&&y + 20 * m>=360) break
-        console.log(machine[x + 20 * m][y + 20 * m] , temp)
+        if (x + 20 * m >= 360 && y + 20 * m >= 360) break
+        // console.log(machine[x + 20 * m][y + 20 * m] , temp)
         if (machine[x + 20 * m][y + 20 * m] === temp) {
           count.upperLeft++
         } else {
@@ -237,7 +206,7 @@
       }
       // // 判断左下到右上的斜线
       for (let i = 0; i < 5; i++) {
-        if(x-20*i<=0&&y + 20 * i>=360) break
+        if (x - 20 * i <= 0 && y + 20 * i >= 360) break
         if (machine[x - 20 * i][y + 20 * i] === temp) {
           count.lowerLeft++
         } else {
@@ -245,8 +214,8 @@
         }
       }
       for (let m = 1; m < 5; m++) {
-        machine[x + 20 * m]=[]
-        if(x+20*m>=360&&y - 20 * m<=0) break
+        // machine[x + 20 * m]=[]
+        if (x + 20 * m >= 360 && y - 20 * m <= 0) break
         // console.log(222,x,y,x + 20 * m,y - 20 * m,machine[x + 20 * m][y - 20 * m],machine)
         if (machine[x + 20 * m][y - 20 * m] === temp) {
           count.lowerLeft++
