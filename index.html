@@ -124,38 +124,51 @@
     }
     // 机器下棋
     function MachineChess() {
-      let x, y
+      let x=0, y=0
       model()
       DrawPiece('white', x, y)
       machine[x][y] = 2
       isWin('white', x, y)
     }
     // 判断落棋地点
-    function model(){
-      let 
-      for (let i = 0; i < 19; i++) {
-        for (let j = 0; j < 19; j++) {
-          if (machine[i * 20][j * 20] === 0) {
+    function model(count){
+      // let 
+      // for (let i = 0; i < 19; i++) {
+      //   for (let j = 0; j < 19; j++) {
+      //     if (machine[i * 20][j * 20] === 0) {
 
-          }
-        }
-      }
+      //     }
+      //   }
+      // }
+      let One=0
+      let 
     }
 
     // 判断是否赢了
     function isWin(color, x, y) {
+      let temp = color === 'black' ? 1 : 2
       count = {
         left: 0,
         top: 0,
         upperLeft: 0, //左上开始
         lowerLeft: 0 //左下开始
       }
+      LeftToRight(temp,x, y)
+      TopToBottom(temp,x, y)
+      UpperToLower(temp,x, y)
+      LowerToUpper(temp,x, y)
+      console.log(count)
+      if (count.left >= 5 || count.top >= 5 || count.upperLeft >= 5 || count.lowerLeft >= 5) {
+        alert('you win')
+      }
+    }
       // 判断横向
-      let temp = color === 'black' ? 1 : 2
+    function LeftToRight(temp,x, y){
+      let count=0
       for (let i = 0; i < 5; i++) {
         if (x - 20 * i <= 0) break
         if (machine[x - 20 * i][y] === temp) {
-          count.left++
+          count++
         } else {
           break
         }
@@ -163,16 +176,20 @@
       for (let m = 1; m < 5; m++) {
         if (x + 20 * m >= 360) break
         if (machine[x + 20 * m][y] === temp) {
-          count.left++
+          count++
         } else {
           break
         }
       }
-      // // 判断纵向
+      return count
+    }
+     // 判断纵向
+    function TopToBottom(temp,x, y){
+      let count=0
       for (let i = 0; i < 5; i++) {
         if (y - 20 * i <= 0) break
         if (machine[x][y - 20 * i] === temp) {
-          count.top++
+          count++
         } else {
           break
         }
@@ -180,53 +197,54 @@
       for (let m = 1; m < 5; m++) {
         if (y + 20 * m >= 360) break
         if (machine[x][y + 20 * m] === temp) {
-          count.top++
+          count++
         } else {
           break
         }
       }
-      // // 判断左上到右下的斜线
+      return count
+    }
+      // 判断左上到右下的斜线
+    function UpperToLower(temp,x, y){
+      let count=0
       for (let i = 0; i < 5; i++) {
-        if (x - 20 * i <= 0 && y - 20 * i <= 0) break
-        // console.log(machine[x - 20 * i][y - 20 * i] , temp)
+        if (x - 20 * i <= 0 || y - 20 * i <= 0) break
         if (machine[x - 20 * i][y - 20 * i] === temp) {
-          count.upperLeft++
+          count++
         } else {
           break
         }
       }
       for (let m = 1; m < 5; m++) {
-        if (x + 20 * m >= 360 && y + 20 * m >= 360) break
-        // console.log(machine[x + 20 * m][y + 20 * m] , temp)
+        if (x + 20 * m >= 360 || y + 20 * m >= 360) break
         if (machine[x + 20 * m][y + 20 * m] === temp) {
-          count.upperLeft++
+          count++
         } else {
           break
         }
       }
-      // // 判断左下到右上的斜线
+      return count
+    }
+      // 判断左下到右上的斜线
+    function LowerToUpper(temp,x, y){
+      let count=0
       for (let i = 0; i < 5; i++) {
-        if (x - 20 * i <= 0 && y + 20 * i >= 360) break
+        if (x - 20 * i <= 0 || y + 20 * i >= 360) break
         if (machine[x - 20 * i][y + 20 * i] === temp) {
-          count.lowerLeft++
+          count++
         } else {
           break
         }
       }
       for (let m = 1; m < 5; m++) {
-        // machine[x + 20 * m]=[]
-        if (x + 20 * m >= 360 && y - 20 * m <= 0) break
-        // console.log(222,x,y,x + 20 * m,y - 20 * m,machine[x + 20 * m][y - 20 * m],machine)
+        if (x + 20 * m >= 360 || y - 20 * m <= 0) break
         if (machine[x + 20 * m][y - 20 * m] === temp) {
-          count.lowerLeft++
+          count++
         } else {
           break
         }
       }
-      console.log(count)
-      if (count.left >= 5 || count.top >= 5 || count.upperLeft >= 5 || count.lowerLeft >= 5) {
-        alert('you win')
-      }
+      return count
     }
   </script>
 </body>
