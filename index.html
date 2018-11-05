@@ -30,6 +30,8 @@
     }
     let machine //机器下棋位置集合
     let chessX, chessY
+    let pflag = true,
+      mflag = false
 
     window.onload = function () {
       Draw()
@@ -103,57 +105,69 @@
     }
     // 人下棋位置判断
     function Position(x, y) {
+      if (!pflag) {
+        return
+      }
       for (let i = x - 8; i < x + 8; i++) {
         for (let j = y - 8; j < y + 8; j++) {
           if (i % 20 === 0 && j % 20 === 0) {
             if (machine[i][j]) {
               break
             }
+            pflag = false
+            mflag = true
             // console.log(x, y, ' i:' + i + ' j:' + j)
             DrawPiece('black', i, j)
             chessX = i
             chessY = j
             machine[i][j] = 1
             isWin('black', i, j)
+
           }
         }
       }
-      setTimeout(() => {
-        MachineChess()
-      }, 500)
+      if (mflag) {
+        setTimeout(() => {
+          MachineChess()
+        }, 1000)
+      }
     }
     // 机器下棋
     function MachineChess() {
-      // let x = chessX - 20,
-      //   y = chessY - 20
-      // DrawPiece('white', x, y)
-      // machine[x][y] = 2
-      // isWin('white', x, y)
-      let sum=0,x=0,y=0
-      for(let i=0;i<19;i++){
-        for(let j=0;j<19;j++){
-          if(machine[i*20][j*20]===0){
-            if(judge(i*20,j*20)>sum){
-              console.log(1111111111)
-              sum=judge(i*20,j*20)
-              x=i*20
-              y=j*20
+      let sum = 0,
+        x = chessX - 20
+      y = chessY - 20
+      for (let i = 0; i < 19; i++) {
+        for (let j = 0; j < 19; j++) {
+          if (machine[i * 20][j * 20] === 0) {
+            if (judge(i * 20, j * 20) > sum) {
+              sum = judge(i * 20, j * 20)
+              x = i * 20
+              y = j * 20
             }
           }
         }
       }
+      mflag = false
+      pflag = true
+
+      console.log(x, y)
       DrawPiece('white', x, y)
       machine[x][y] = 2
       isWin('white', x, y)
+
     }
-    function judge(x,y){
-      let machine=parseInt(LeftToRight(2,x,y))+parseInt(TopToBottom(2,x,y))+parseInt(UpperToLower(2,x,y))+parseInt(LowerToUpper(2,x,y))
-      let person=parseInt(LeftToRight(1,x,y))+parseInt(TopToBottom(1,x,y))+parseInt(UpperToLower(1,x,y))+parseInt(LowerToUpper(1,x,y))
-      return person+machine
+
+    function judge(x, y) {
+      let m = parseInt(LeftToRight(2, x, y)) + parseInt(TopToBottom(2, x, y)) + parseInt(UpperToLower(2, x, y)) +
+        parseInt(LowerToUpper(2, x, y))
+      let person = parseInt(LeftToRight(1, x, y)) + parseInt(TopToBottom(1, x, y)) + parseInt(UpperToLower(1, x, y)) +
+        parseInt(LowerToUpper(1, x, y))
+      return person + m
     }
     // 判断落棋地点得分
     function model(count, death) {
-    //   console.log(count, death)
+      //   console.log(count, death)
       var LIVE_ONE = 0 //单子，死棋
       var LIVE_TWO = 1 //眠2，眠1
       var LIVE_THREE = 3000 //眠3，活2
@@ -187,10 +201,11 @@
           return LIVE_FOER //冲4
         } else {
           return LIVE_ONE //死棋
-        }} else if (count === 5) {
-        return LIVE_SIX
         }
-          return LIVE_ONE //单子
+      } else if (count === 5) {
+        return LIVE_SIX
+      }
+      return LIVE_ONE //单子
     }
 
     // 判断是否赢了
@@ -200,6 +215,17 @@
       TopToBottom(temp, x, y)
       UpperToLower(temp, x, y)
       LowerToUpper(temp, x, y)
+      if (LeftToRight(temp, x, y) >= 6000 || TopToBottom(temp, x, y) >= 6000 || UpperToLower(temp, x, y) >= 6000 ||
+        LowerToUpper(temp, x, y) >= 6000) {
+        if (temp === 1) {
+          alert('you win')
+        } else {
+          alert('白棋赢了')
+        }
+
+        mflag = false
+        pflag = false
+      }
     }
     // 判断横向
     function LeftToRight(temp, x, y) {
@@ -325,7 +351,7 @@
       }
       return model(count, death)
     }
-    
+
     /**五子棋AI
      *思路：对棋盘上的每一个空格进行估分，电脑优先在分值高的点落子
      * 棋型：
