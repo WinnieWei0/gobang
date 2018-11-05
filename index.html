@@ -109,7 +109,7 @@
             if (machine[i][j]) {
               break
             }
-            console.log(x, y, ' i:' + i + ' j:' + j)
+            // console.log(x, y, ' i:' + i + ' j:' + j)
             DrawPiece('black', i, j)
             chessX = i
             chessY = j
@@ -120,56 +120,101 @@
       }
       setTimeout(() => {
         MachineChess()
-      }, 1000)
+      }, 500)
     }
     // 机器下棋
     function MachineChess() {
-      let x=0, y=0
-      model()
+      // let x = chessX - 20,
+      //   y = chessY - 20
+      // DrawPiece('white', x, y)
+      // machine[x][y] = 2
+      // isWin('white', x, y)
+      let sum=0,x=0,y=0
+      for(let i=0;i<19;i++){
+        for(let j=0;j<19;j++){
+          if(machine[i*20][j*20]===0){
+            if(judge(i*20,j*20)>sum){
+              console.log(1111111111)
+              sum=judge(i*20,j*20)
+              x=i*20
+              y=j*20
+            }
+          }
+        }
+      }
       DrawPiece('white', x, y)
       machine[x][y] = 2
       isWin('white', x, y)
     }
-    // 判断落棋地点
-    function model(count){
-      // let 
-      // for (let i = 0; i < 19; i++) {
-      //   for (let j = 0; j < 19; j++) {
-      //     if (machine[i * 20][j * 20] === 0) {
-
-      //     }
-      //   }
-      // }
-      let One=0
-      let 
+    function judge(x,y){
+      let machine=parseInt(LeftToRight(2,x,y))+parseInt(TopToBottom(2,x,y))+parseInt(UpperToLower(2,x,y))+parseInt(LowerToUpper(2,x,y))
+      let person=parseInt(LeftToRight(1,x,y))+parseInt(TopToBottom(1,x,y))+parseInt(UpperToLower(1,x,y))+parseInt(LowerToUpper(1,x,y))
+      return person+machine
+    }
+    // 判断落棋地点得分
+    function model(count, death) {
+    //   console.log(count, death)
+      var LIVE_ONE = 0 //单子，死棋
+      var LIVE_TWO = 1 //眠2，眠1
+      var LIVE_THREE = 3000 //眠3，活2
+      var LIVE_FOER = 4000 //冲4，活3
+      var LIVE_FIVE = 5000 //活4
+      var LIVE_SIX = 6000 //成5
+      if (count === 1) {
+        if (death === 1) {
+          return LIVE_TWO //眠1
+        }
+      } else if (count === 2) {
+        if (death === 0) {
+          return LIVE_THREE //活2
+        } else if (death === 1) {
+          return LIVE_TWO //眠2
+        } else {
+          return LIVE_ONE //死棋
+        }
+      } else if (count === 3) {
+        if (death === 0) {
+          return LIVE_FOER //活3
+        } else if (death === 1) {
+          return LIVE_THREE //眠3
+        } else {
+          return LIVE_ONE //死棋
+        }
+      } else if (count === 4) {
+        if (death === 0) {
+          return LIVE_FIVE //活4
+        } else if (death === 1) {
+          return LIVE_FOER //冲4
+        } else {
+          return LIVE_ONE //死棋
+        }} else if (count === 5) {
+        return LIVE_SIX
+        }
+          return LIVE_ONE //单子
     }
 
     // 判断是否赢了
     function isWin(color, x, y) {
       let temp = color === 'black' ? 1 : 2
-      count = {
-        left: 0,
-        top: 0,
-        upperLeft: 0, //左上开始
-        lowerLeft: 0 //左下开始
-      }
-      LeftToRight(temp,x, y)
-      TopToBottom(temp,x, y)
-      UpperToLower(temp,x, y)
-      LowerToUpper(temp,x, y)
-      console.log(count)
-      if (count.left >= 5 || count.top >= 5 || count.upperLeft >= 5 || count.lowerLeft >= 5) {
-        alert('you win')
-      }
+      LeftToRight(temp, x, y)
+      TopToBottom(temp, x, y)
+      UpperToLower(temp, x, y)
+      LowerToUpper(temp, x, y)
     }
-      // 判断横向
-    function LeftToRight(temp,x, y){
-      let count=0
+    // 判断横向
+    function LeftToRight(temp, x, y) {
+      let count = 0
+      let death = 0 //0表示两边都没堵住,且可以成5，1表示一边堵住了，可以成5,2表示是死棋，不予考虑
+      let live = 0
       for (let i = 0; i < 5; i++) {
         if (x - 20 * i <= 0) break
-        if (machine[x - 20 * i][y] === temp) {
+        if (machine[x - 20 * i][y] === temp) { //有值累加
           count++
-        } else {
+        } else if (machine[x - 20 * i][y] === 0) { //没值做标记
+          live += 1
+          break
+        } else { //不同颜色的棋子
+          death += 1
           break
         }
       }
@@ -177,20 +222,30 @@
         if (x + 20 * m >= 360) break
         if (machine[x + 20 * m][y] === temp) {
           count++
-        } else {
+        } else if (machine[x + 20 * m][y] === 0) { //没值做标记
+          live += 1
+          break
+        } else { //不同颜色的棋子
+          death += 1
           break
         }
       }
-      return count
+      return model(count, death)
     }
-     // 判断纵向
-    function TopToBottom(temp,x, y){
-      let count=0
+    // 判断纵向
+    function TopToBottom(temp, x, y) {
+      let count = 0
+      let death = 0
+      let live = 0
       for (let i = 0; i < 5; i++) {
         if (y - 20 * i <= 0) break
-        if (machine[x][y - 20 * i] === temp) {
+        if (machine[x][y - 20 * i] === temp) { //有值累加
           count++
-        } else {
+        } else if (machine[x][y - 20 * i] === 0) { //没值做标记
+          live += 1
+          break
+        } else { //不同颜色的棋子
+          death += 1
           break
         }
       }
@@ -198,20 +253,30 @@
         if (y + 20 * m >= 360) break
         if (machine[x][y + 20 * m] === temp) {
           count++
-        } else {
+        } else if (machine[x][y + 20 * m] === 0) { //没值做标记
+          live += 1
+          break
+        } else { //不同颜色的棋子
+          death += 1
           break
         }
       }
-      return count
+      return model(count, death)
     }
-      // 判断左上到右下的斜线
-    function UpperToLower(temp,x, y){
-      let count=0
+    // 判断左上到右下的斜线
+    function UpperToLower(temp, x, y) {
+      let count = 0
+      let death = 0
+      let live = 0
       for (let i = 0; i < 5; i++) {
         if (x - 20 * i <= 0 || y - 20 * i <= 0) break
-        if (machine[x - 20 * i][y - 20 * i] === temp) {
+        if (machine[x - 20 * i][y - 20 * i] === temp) { //有值累加
           count++
-        } else {
+        } else if (machine[x - 20 * i][y - 20 * i] === 0) { //没值做标记
+          live += 1
+          break
+        } else { //不同颜色的棋子
+          death += 1
           break
         }
       }
@@ -219,20 +284,30 @@
         if (x + 20 * m >= 360 || y + 20 * m >= 360) break
         if (machine[x + 20 * m][y + 20 * m] === temp) {
           count++
-        } else {
+        } else if (machine[x + 20 * m][y + 20 * m] === 0) { //没值做标记
+          live += 1
+          break
+        } else { //不同颜色的棋子
+          death += 1
           break
         }
       }
-      return count
+      return model(count, death)
     }
-      // 判断左下到右上的斜线
-    function LowerToUpper(temp,x, y){
-      let count=0
+    // 判断左下到右上的斜线
+    function LowerToUpper(temp, x, y) {
+      let count = 0
+      let death = 0
+      let live = 0
       for (let i = 0; i < 5; i++) {
         if (x - 20 * i <= 0 || y + 20 * i >= 360) break
-        if (machine[x - 20 * i][y + 20 * i] === temp) {
+        if (machine[x - 20 * i][y + 20 * i] === temp) { //有值累加
           count++
-        } else {
+        } else if (machine[x - 20 * i][y + 20 * i] === 0) { //没值做标记
+          live += 1
+          break
+        } else { //不同颜色的棋子
+          death += 1
           break
         }
       }
@@ -240,12 +315,51 @@
         if (x + 20 * m >= 360 || y - 20 * m <= 0) break
         if (machine[x + 20 * m][y - 20 * m] === temp) {
           count++
-        } else {
+        } else if (machine[x + 20 * m][y - 20 * m] === 0) { //没值做标记
+          live += 1
+          break
+        } else { //不同颜色的棋子
+          death += 1
           break
         }
       }
-      return count
+      return model(count, death)
     }
+    
+    /**五子棋AI
+     *思路：对棋盘上的每一个空格进行估分，电脑优先在分值高的点落子
+     * 棋型：
+     * 〖五连〗只有五枚同色棋子在一条阳线或阴线上相邻成一排
+     * 〖成五〗含有五枚同色棋子所形成的连，包括五连和长连。
+     * 〖活四〗有两个点可以成五的四。
+     * 〖冲四〗只有一个点可以成五的四。
+     * 〖死四〗不能成五的四。
+     * 〖三〗在一条阳线或阴线上连续相邻的5个点上只有三枚同色棋子的棋型。
+     * 〖活三〗再走一着可以形成活四的三。
+     * 〖连活三〗即：连的活三（同色棋子在一条阳线或阴线上相邻成一排的活三）。简称“连三”。
+     * 〖跳活三〗中间隔有一个空点的活三。简称“跳三”。
+     * 〖眠三〗再走一着可以形成冲四的三。
+     * 〖死三〗不能成五的三。
+     * 〖二〗在一条阳线或阴线上连续相邻的5个点上只有两枚同色棋子的棋型。
+     * 〖活二〗再走一着可以形成活三的二。
+     * 〖连活二〗即：连的活二（同色棋子在一条阳线或阴线上相邻成一排的活二）。简称“连二”。
+     * 〖跳活二〗中间隔有一个空点的活二。简称“跳二”。
+     * 〖大跳活二〗中间隔有两个空点的活二。简称“大跳二”。
+     * 〖眠二〗再走一着可以形成眠三的二。
+     * 〖死二〗不能成五的二。
+     * 〖先手〗对方必须应答的着法，相对于先手而言，冲四称为“绝对先手”。
+     * 〖三三〗一子落下同时形成两个活三。也称“双三”。
+     * 〖四四〗一子落下同时形成两个冲四。也称“双四”。
+     * 〖四三〗一子落下同时形成一个冲四和一个活三。
+     * 分值表
+     * 成5:6000分
+     * 活4：5000分
+     * 活3+冲4:4000分
+     * 眠3+活2：3000分
+     * 眠2+眠1:1分
+     * 死棋即不能成5的是0分
+     * @return {[type]} [description]
+     */
   </script>
 </body>
 
