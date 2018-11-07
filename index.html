@@ -17,7 +17,9 @@
         <canvas id="myCanvas" width="360" height="360"></canvas>
       </div>
     </div>
-    <div class="right">right</div>
+    <div class="right">
+      <button class="reload">重 新 开 始</button>
+    </div>
   </div>
   <script src="./jquery-3.3.1.min.js"></script>
   <script>
@@ -121,7 +123,9 @@
             chessX = i
             chessY = j
             machine[i][j] = 1
+            console.log('0000000000000000')
             isWin('black', i, j)
+            console.log('0000000000000000')
 
           }
         }
@@ -151,7 +155,7 @@
       mflag = false
       pflag = true
 
-      console.log(x, y)
+      // console.log(x, y)
       DrawPiece('white', x, y)
       machine[x][y] = 2
       isWin('white', x, y)
@@ -159,11 +163,22 @@
     }
 
     function judge(x, y) {
-      let m = parseInt(LeftToRight(2, x, y)) + parseInt(TopToBottom(2, x, y)) + parseInt(UpperToLower(2, x, y)) +
-        parseInt(LowerToUpper(2, x, y))
-      let person = parseInt(LeftToRight(1, x, y)) + parseInt(TopToBottom(1, x, y)) + parseInt(UpperToLower(1, x, y)) +
-        parseInt(LowerToUpper(1, x, y))
-      return person + m
+      // console.log(11111111111111, parseInt(LeftToRight(1, x, y)), parseInt(TopToBottom(1, x, y)), parseInt(UpperToLower(
+      //     1, x, y)),
+      //   parseInt(LowerToUpper(1, x, y)))
+      // console.log(22222222222222, parseInt(LeftToRight(2, x, y)), parseInt(TopToBottom(2, x, y)), parseInt(UpperToLower(
+      //     2, x, y)),
+      //   parseInt(LowerToUpper(2, x, y)))
+      let m = parseInt(LeftToRight(2, x, y)) + parseInt(TopToBottom(2, x, y)) + parseInt(UpperToLower(2, x, y)) + parseInt(LowerToUpper(2, x, y))
+      // let person = parseInt(LeftToRight(1, x, y)) + parseInt(TopToBottom(1, x, y)) + parseInt(UpperToLower(1, x, y)) +
+      //   parseInt(LowerToUpper(1, x, y))
+      // console.log(333333333333333, person, m)
+      // return person + m
+
+      
+      
+      console.log(333333333333333, x,y,m)
+      return m
     }
     // 判断落棋地点得分
     function model(count, death) {
@@ -176,45 +191,57 @@
       var LIVE_SIX = 6000 //成5
       if (count === 1) {
         if (death === 1) {
+          console.log('aaaaaaaaaa')
           return LIVE_TWO //眠1
         }
       } else if (count === 2) {
         if (death === 0) {
+          console.log('bbbbbbbb')
           return LIVE_THREE //活2
         } else if (death === 1) {
+          console.log('cccccccc')
           return LIVE_TWO //眠2
         } else {
+          console.log('ddddddddddd')
           return LIVE_ONE //死棋
         }
       } else if (count === 3) {
         if (death === 0) {
+          console.log('eeeeeeeeeeee')
           return LIVE_FOER //活3
         } else if (death === 1) {
+          console.log('ffffffffffffff')
           return LIVE_THREE //眠3
         } else {
+          console.log('gggggggggg')
           return LIVE_ONE //死棋
         }
       } else if (count === 4) {
         if (death === 0) {
+          console.log('hhhhhhhhhhh')
           return LIVE_FIVE //活4
         } else if (death === 1) {
+          console.log('iiiiiiiiiiiiii')
           return LIVE_FOER //冲4
         } else {
+          console.log('jjjjjjjjjjjj')
           return LIVE_ONE //死棋
         }
       } else if (count === 5) {
+        console.log('kkkkkkkkkkkkkkk')
         return LIVE_SIX
       }
+      console.log('mmmmmmmmm')
       return LIVE_ONE //单子
     }
 
     // 判断是否赢了
     function isWin(color, x, y) {
       let temp = color === 'black' ? 1 : 2
-      LeftToRight(temp, x, y)
-      TopToBottom(temp, x, y)
-      UpperToLower(temp, x, y)
-      LowerToUpper(temp, x, y)
+      // LeftToRight(temp, x, y)
+      // TopToBottom(temp, x, y)
+      // UpperToLower(temp, x, y)
+      // LowerToUpper(temp, x, y)
       if (LeftToRight(temp, x, y) >= 6000 || TopToBottom(temp, x, y) >= 6000 || UpperToLower(temp, x, y) >= 6000 ||
         LowerToUpper(temp, x, y) >= 6000) {
         if (temp === 1) {
@@ -352,6 +379,9 @@
       return model(count, death)
     }
 
+    $('.reload').click(() => {
+      location.reload()
+    })
     /**五子棋AI
      *思路：对棋盘上的每一个空格进行估分，电脑优先在分值高的点落子
      * 棋型：
