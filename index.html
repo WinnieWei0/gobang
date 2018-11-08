@@ -123,9 +123,9 @@
             chessX = i
             chessY = j
             machine[i][j] = 1
-            console.log('0000000000000000')
+            // console.log('0000000000000000')
             isWin('black', i, j)
-            console.log('0000000000000000')
+            // console.log('0000000000000000')
 
           }
         }
@@ -141,13 +141,16 @@
       let sum = 0,
         x = chessX - 20
       y = chessY - 20
+      // machine[chessX - 20][chessY - 20] = 2
       for (let i = 0; i < 19; i++) {
         for (let j = 0; j < 19; j++) {
           if (machine[i * 20][j * 20] === 0) {
             if (judge(i * 20, j * 20) > sum) {
+              // console.log(333333333333333333333333333333,i,j)
               sum = judge(i * 20, j * 20)
               x = i * 20
               y = j * 20
+              // console.log(333333333333333333333333333333333,i,j)
             }
           }
         }
@@ -158,7 +161,9 @@
       // console.log(x, y)
       DrawPiece('white', x, y)
       machine[x][y] = 2
+      console.log(11111111111111)
       isWin('white', x, y)
+      console.log(11111111111111)
 
     }
 
@@ -169,20 +174,21 @@
       // console.log(22222222222222, parseInt(LeftToRight(2, x, y)), parseInt(TopToBottom(2, x, y)), parseInt(UpperToLower(
       //     2, x, y)),
       //   parseInt(LowerToUpper(2, x, y)))
-      let m = parseInt(LeftToRight(2, x, y)) + parseInt(TopToBottom(2, x, y)) + parseInt(UpperToLower(2, x, y)) + parseInt(LowerToUpper(2, x, y))
+      let m = parseInt(LeftToRight(2, x, y)) + parseInt(TopToBottom(2, x, y)) + parseInt(UpperToLower(2, x, y)) +
+        parseInt(LowerToUpper(2, x, y))
       // let person = parseInt(LeftToRight(1, x, y)) + parseInt(TopToBottom(1, x, y)) + parseInt(UpperToLower(1, x, y)) +
       //   parseInt(LowerToUpper(1, x, y))
       // console.log(333333333333333, person, m)
       // return person + m
 
-      
-      
-      console.log(333333333333333, x,y,m)
+
+
+      // console.log(333333333333333, x, y, m)
       return m
     }
     // 判断落棋地点得分
     function model(count, death) {
-      //   console.log(count, death)
+      console.log(count, death)
       var LIVE_ONE = 0 //单子，死棋
       var LIVE_TWO = 1 //眠2，眠1
       var LIVE_THREE = 3000 //眠3，活2
@@ -191,68 +197,65 @@
       var LIVE_SIX = 6000 //成5
       if (count === 1) {
         if (death === 1) {
-          console.log('aaaaaaaaaa')
+          // console.log('aaaaaaaaaa')
           return LIVE_TWO //眠1
         }
       } else if (count === 2) {
         if (death === 0) {
-          console.log('bbbbbbbb')
+          // console.log('bbbbbbbb')
           return LIVE_THREE //活2
         } else if (death === 1) {
-          console.log('cccccccc')
+          // console.log('cccccccc')
           return LIVE_TWO //眠2
         } else {
-          console.log('ddddddddddd')
+          // console.log('ddddddddddd')
           return LIVE_ONE //死棋
         }
       } else if (count === 3) {
         if (death === 0) {
-          console.log('eeeeeeeeeeee')
+          // console.log('eeeeeeeeeeee')
           return LIVE_FOER //活3
         } else if (death === 1) {
-          console.log('ffffffffffffff')
+          // console.log('ffffffffffffff')
           return LIVE_THREE //眠3
         } else {
-          console.log('gggggggggg')
+          // console.log('gggggggggg')
           return LIVE_ONE //死棋
         }
       } else if (count === 4) {
         if (death === 0) {
-          console.log('hhhhhhhhhhh')
+          // console.log('hhhhhhhhhhh')
           return LIVE_FIVE //活4
         } else if (death === 1) {
-          console.log('iiiiiiiiiiiiii')
+          // console.log('iiiiiiiiiiiiii')
           return LIVE_FOER //冲4
         } else {
-          console.log('jjjjjjjjjjjj')
+          // console.log('jjjjjjjjjjjj')
           return LIVE_ONE //死棋
         }
       } else if (count === 5) {
-        console.log('kkkkkkkkkkkkkkk')
+        // console.log('kkkkkkkkkkkkkkk')
         return LIVE_SIX
       }
-      console.log('mmmmmmmmm')
+      // console.log('mmmmmmmmm')
       return LIVE_ONE //单子
     }
 
     // 判断是否赢了
     function isWin(color, x, y) {
       let temp = color === 'black' ? 1 : 2
-      // LeftToRight(temp, x, y)
-      // TopToBottom(temp, x, y)
-      // UpperToLower(temp, x, y)
-      // LowerToUpper(temp, x, y)
-      if (LeftToRight(temp, x, y) >= 6000 || TopToBottom(temp, x, y) >= 6000 || UpperToLower(temp, x, y) >= 6000 ||
-        LowerToUpper(temp, x, y) >= 6000) {
-        if (temp === 1) {
-          alert('you win')
-        } else {
-          alert('白棋赢了')
-        }
+      console.log(666666666666666,LeftToRight(temp, x, y), TopToBottom(temp, x, y), UpperToLower(temp, x, y), LowerToUpper(temp, x, y))
+      // if (LeftToRight(temp, x, y) >= 6000 || TopToBottom(temp, x, y) >= 6000 || UpperToLower(temp, x, y) >= 6000 ||
+      //   LowerToUpper(temp, x, y) >= 6000) {
+      //   if (temp === 1) {
+      //     alert('you win')
+      //   } else {
+      //     alert('白棋赢了')
+      //   }
 
-        mflag = false
-        pflag = false
-      }
+      //   mflag = false
+      //   pflag = false
+      // }
     }
     // 判断横向
     function LeftToRight(temp, x, y) {
@@ -261,6 +264,7 @@
       let live = 0
       for (let i = 0; i < 5; i++) {
         if (x - 20 * i <= 0) break
+        // console.log(x - 20 * i,y,machine[x - 20 * i][y] , temp)
         if (machine[x - 20 * i][y] === temp) { //有值累加
           count++
         } else if (machine[x - 20 * i][y] === 0) { //没值做标记
@@ -283,6 +287,7 @@
           break
         }
       }
+      // console.log(22222222222222222,count,death)
       return model(count, death)
     }
     // 判断纵向
