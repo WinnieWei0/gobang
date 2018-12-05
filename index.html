@@ -144,7 +144,9 @@
       // machine[chessX - 20][chessY - 20] = 2
       for (let i = 0; i < 19; i++) {
         for (let j = 0; j < 19; j++) {
+          console.log(111111111111111,i,j,machine[i * 20][j * 20])
           if (machine[i * 20][j * 20] === 0) {
+            console.log(222222222222222,judge(i * 20, j * 20) , sum)
             if (judge(i * 20, j * 20) > sum) {
               // console.log(333333333333333333333333333333,i,j)
               sum = judge(i * 20, j * 20)
@@ -161,9 +163,9 @@
       // console.log(x, y)
       DrawPiece('white', x, y)
       machine[x][y] = 2
-      console.log(11111111111111)
+      // console.log(11111111111111)
       isWin('white', x, y)
-      console.log(11111111111111)
+      // console.log(11111111111111)
 
     }
 
@@ -176,19 +178,19 @@
       //   parseInt(LowerToUpper(2, x, y)))
       let m = parseInt(LeftToRight(2, x, y)) + parseInt(TopToBottom(2, x, y)) + parseInt(UpperToLower(2, x, y)) +
         parseInt(LowerToUpper(2, x, y))
-      // let person = parseInt(LeftToRight(1, x, y)) + parseInt(TopToBottom(1, x, y)) + parseInt(UpperToLower(1, x, y)) +
-      //   parseInt(LowerToUpper(1, x, y))
+      let person = parseInt(LeftToRight(1, x, y)) + parseInt(TopToBottom(1, x, y)) + parseInt(UpperToLower(1, x, y)) +
+        parseInt(LowerToUpper(1, x, y))
       // console.log(333333333333333, person, m)
-      // return person + m
+      return person + m
 
 
 
       // console.log(333333333333333, x, y, m)
-      return m
+      // return m
     }
     // 判断落棋地点得分
     function model(count, death) {
-      console.log(count, death)
+      // console.log(count, death)
       var LIVE_ONE = 0 //单子，死棋
       var LIVE_TWO = 1 //眠2，眠1
       var LIVE_THREE = 3000 //眠3，活2
@@ -196,66 +198,69 @@
       var LIVE_FIVE = 5000 //活4
       var LIVE_SIX = 6000 //成5
       if (count === 1) {
-        if (death === 1) {
-          // console.log('aaaaaaaaaa')
+        if (death === 0) {
+          console.log('aaaaaaaaaa',count,death)
+          return LIVE_TWO //单子
+        }else if(death===1){
+          console.log('nnnnnnnnnnnnnnnnn',count,death)
           return LIVE_TWO //眠1
         }
       } else if (count === 2) {
         if (death === 0) {
-          // console.log('bbbbbbbb')
+          console.log('bbbbbbbb',count,death)
           return LIVE_THREE //活2
         } else if (death === 1) {
-          // console.log('cccccccc')
+          console.log('cccccccc',count,death)
           return LIVE_TWO //眠2
         } else {
-          // console.log('ddddddddddd')
+          console.log('ddddddddddd',count,death)
           return LIVE_ONE //死棋
         }
       } else if (count === 3) {
         if (death === 0) {
-          // console.log('eeeeeeeeeeee')
+          console.log('eeeeeeeeeeee',count,death)
           return LIVE_FOER //活3
         } else if (death === 1) {
-          // console.log('ffffffffffffff')
+          console.log('ffffffffffffff',count,death)
           return LIVE_THREE //眠3
         } else {
-          // console.log('gggggggggg')
+          console.log('gggggggggg',count,death)
           return LIVE_ONE //死棋
         }
       } else if (count === 4) {
         if (death === 0) {
-          // console.log('hhhhhhhhhhh')
+          console.log('hhhhhhhhhhh',count,death)
           return LIVE_FIVE //活4
         } else if (death === 1) {
-          // console.log('iiiiiiiiiiiiii')
+          console.log('iiiiiiiiiiiiii',count,death)
           return LIVE_FOER //冲4
         } else {
-          // console.log('jjjjjjjjjjjj')
+          console.log('jjjjjjjjjjjj',count,death)
           return LIVE_ONE //死棋
         }
       } else if (count === 5) {
-        // console.log('kkkkkkkkkkkkkkk')
+        console.log('kkkkkkkkkkkkkkk',count,death)
         return LIVE_SIX
       }
-      // console.log('mmmmmmmmm')
+      console.log('mmmmmmmmm',count,death)
       return LIVE_ONE //单子
     }
 
     // 判断是否赢了
     function isWin(color, x, y) {
       let temp = color === 'black' ? 1 : 2
-      console.log(666666666666666,LeftToRight(temp, x, y), TopToBottom(temp, x, y), UpperToLower(temp, x, y), LowerToUpper(temp, x, y))
-      // if (LeftToRight(temp, x, y) >= 6000 || TopToBottom(temp, x, y) >= 6000 || UpperToLower(temp, x, y) >= 6000 ||
-      //   LowerToUpper(temp, x, y) >= 6000) {
-      //   if (temp === 1) {
-      //     alert('you win')
-      //   } else {
-      //     alert('白棋赢了')
-      //   }
+      // console.log(666666666666666,LeftToRight(temp, x, y), TopToBottom(temp, x, y), UpperToLower(temp, x, y), LowerToUpper(temp, x, y))
+      if (LeftToRight(temp, x, y) === 6000 || TopToBottom(temp, x, y) === 6000 || UpperToLower(temp, x, y) === 6000 ||
+        LowerToUpper(temp, x, y) === 6000) {
+        if (temp === 1) {
+          alert('you win')
+        } else {
+          alert('白棋赢了')
+        }
 
-      //   mflag = false
-      //   pflag = false
-      // }
+        mflag = false
+        pflag = false
+      }
     }
     // 判断横向
     function LeftToRight(temp, x, y) {
@@ -288,7 +293,11 @@
         }
       }
       // console.log(22222222222222222,count,death)
-      return model(count, death)
+      if(count>=5){
+        return 6000
+      }else{
+        return model(count, death)
+      }
     }
     // 判断纵向
     function TopToBottom(temp, x, y) {
@@ -319,7 +328,11 @@
           break
         }
       }
-      return model(count, death)
+      if(count>=5){
+        return 6000
+      }else{
+        return model(count, death)
+      }
     }
     // 判断左上到右下的斜线
     function UpperToLower(temp, x, y) {
@@ -350,7 +363,11 @@
           break
         }
       }
-      return model(count, death)
+      if(count>=5){
+        return 6000
+      }else{
+        return model(count, death)
+      }
     }
     // 判断左下到右上的斜线
     function LowerToUpper(temp, x, y) {
@@ -381,7 +398,11 @@
           break
         }
       }
-      return model(count, death)
+      if(count>=5){
+        return 6000
+      }else{
+        return model(count, death)
+      }
     }
 
     $('.reload').click(() => {
@@ -392,14 +413,14 @@
      * 棋型：
      * 〖五连〗只有五枚同色棋子在一条阳线或阴线上相邻成一排
      * 〖成五〗含有五枚同色棋子所形成的连，包括五连和长连。
-     * 〖活四〗有两个点可以成五的四。
-     * 〖冲四〗只有一个点可以成五的四。
-     * 〖死四〗不能成五的四。
+     * 〖活四〗有两个点可以成五的四。没被堵
+     * 〖冲四〗只有一个点可以成五的四。一边被堵
+     * 〖死四〗不能成五的四。两边被堵
      * 〖三〗在一条阳线或阴线上连续相邻的5个点上只有三枚同色棋子的棋型。
      * 〖活三〗再走一着可以形成活四的三。
      * 〖连活三〗即：连的活三（同色棋子在一条阳线或阴线上相邻成一排的活三）。简称“连三”。
      * 〖跳活三〗中间隔有一个空点的活三。简称“跳三”。
-     * 〖眠三〗再走一着可以形成冲四的三。
+     * 〖眠三〗再走一着可以形成冲四的三。一边被堵
      * 〖死三〗不能成五的三。
      * 〖二〗在一条阳线或阴线上连续相邻的5个点上只有两枚同色棋子的棋型。
      * 〖活二〗再走一着可以形成活三的二。
